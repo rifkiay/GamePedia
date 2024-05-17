@@ -46,6 +46,7 @@ class AppBarDllState extends State<AppBarDll> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: const SizedBox.shrink(),
@@ -58,9 +59,14 @@ class AppBarDllState extends State<AppBarDll> {
                 decoration: InputDecoration(
                   hintText:  _getSearchPlaceholder(),
                   filled: true,
-                  fillColor: Colors.white,
+                  fillColor: Colors.grey[200],
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20.0),
+                    borderSide: BorderSide.none,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                    borderSide: const BorderSide(color: Colors.white), // Warna border saat aktif (ditekan)
                   ),
                   contentPadding:
                       const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
@@ -108,9 +114,10 @@ class AppBarDllState extends State<AppBarDll> {
             },
           ),
         ],
-        backgroundColor: Colors.green,
+        backgroundColor: const Color(0xFF41C9E2),
       ),
       
+      backgroundColor: Colors.grey[200],
       body: IndexedStack(
         index: _selectedIndex,
         children: const [
@@ -120,7 +127,9 @@ class AppBarDllState extends State<AppBarDll> {
         ],
       ),
 
+
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.grey[200],
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -136,7 +145,7 @@ class AppBarDllState extends State<AppBarDll> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.green,
+        selectedItemColor: const Color(0xFF41C9E2),
         onTap: (index) {
           setState(() {
             _selectedIndex = index;

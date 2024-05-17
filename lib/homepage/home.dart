@@ -14,6 +14,9 @@ class HomeState extends State<Home> {
   static const int numPages = 12000;
   static const Duration autoScrollDuration = Duration(seconds: 3);
   late Timer timer;
+  final List<String> coffeeTypes = ['All', 'Berita', 'Market', 'Community'];
+  int selectedIndex = 0;
+
 
   @override
   void initState() {
@@ -51,8 +54,7 @@ class HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    final boxWidth = MediaQuery.of(context).size.width * 0.99;
-    final boxHeight = screenHeight * 0.05;
+    final screenWidth= MediaQuery.of(context).size.width;
 
     return SafeArea(
       child: SingleChildScrollView(
@@ -60,190 +62,119 @@ class HomeState extends State<Home> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Container(
-                width: boxWidth,
-                height: boxHeight,
-                decoration: BoxDecoration(
-                  color: Colors.transparent,
-                  borderRadius: BorderRadius.circular(15),
-                  border: Border.all(color: Colors.black),
-                ),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CircleAvatar(
-                      radius: 20,
-                      backgroundImage: AssetImage('assets/images/buce.jpg'),
+              Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Container(
+                    height: screenHeight * 0.115,
+                    width: screenWidth,
+                    decoration: const BoxDecoration(
+                      color: Color(0xFF41C9E2),
                     ),
-                    SizedBox(width: 10),
-                    Text(
-                      'Rifki Ainul Yaqin',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
+                  ),
+                  Positioned(
+                    top: screenHeight * 0.02, // Adjust this value to change how much of the SizedBox is outside the Container
+                    left: screenWidth * 0.05,
+                    right: screenWidth * 0.05,
+                    child: SizedBox(
+                      height: screenHeight * 0.2,
+                      width: screenWidth * 0.9,
+                      child: PageView.builder(
+                        controller: pageController,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: numPages,
+                        itemBuilder: (BuildContext context, int index) {
+                          return ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.asset(
+                              index % 2 == 0
+                                  ? 'assets/images/image1.jpg'
+                                  : 'assets/images/image-20.png',
+                              fit: BoxFit.cover,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 100), // Adjusted for better spacing
+
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: List.generate(coffeeTypes.length, (index) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                        child: ChoiceChip(
+                          label: Text(coffeeTypes[index]),
+                          selected: selectedIndex == index,
+                          selectedColor: const Color(0xFF41C9E2),
+                          backgroundColor: const Color(0xffE3E3E3),
+                          onSelected: (bool selected) {
+                            setState(() {
+                              selectedIndex = selected ? index : 0;
+                            });
+                          },
+                          labelStyle: TextStyle(
+                            color: selectedIndex == index ? Colors.white : Colors.black,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0), // Sesuaikan dengan kebutuhan Anda
+                            side:  const BorderSide(color: Colors.transparent), // Hilangkan border
+                          ),
+                        ),
+                      );
+                    }),
+                  ),
+                ),
+              ),
+
+               SizedBox(
+                height: 100,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius: BorderRadius.circular(20), // Sesuaikan dengan kebutuhan Anda
+                      ),
+                    ),
+                    Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.circular(20), // Sesuaikan dengan kebutuhan Anda
+                      ),
+                    ),
+                    Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        color: Colors.orange,
+                        borderRadius: BorderRadius.circular(20), // Sesuaikan dengan kebutuhan Anda
                       ),
                     ),
                   ],
                 ),
               ),
               const SizedBox(height: 20),
-              Container(
-                width: boxWidth,
-                height: boxHeight,
-                decoration: BoxDecoration(
-                  color: Colors.transparent,
-                  borderRadius: BorderRadius.circular(15),
-                  border: Border.all(color: Colors.transparent),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.trending_up),
-                      onPressed: () {},
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.bookmark),
-                      onPressed: () {},
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.videogame_asset),
-                      onPressed: () {},
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.shopping_cart),
-                      onPressed: () {},
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.group),
-                      onPressed: () {},
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.article),
-                      onPressed: () {},
-                    ),
-                  ],
-                ),
-              ),
-              
-              //Slider ============================================================= 
-              SizedBox(
-                height: screenHeight * 0.1,
-                child: PageView.builder(
-                  controller: pageController,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: numPages,
-                  itemBuilder: (BuildContext context, int index) {
-                    return ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Image.asset(
-                        index % 2 == 0
-                            ? 'assets/images/image1.jpg'
-                            : 'assets/images/image-20.png',
-                        fit: BoxFit.cover,
-                      ),
-                    );
-                  },
-                ),
-              ),
 
-              // Rekomendasi ============================================================
-              const SizedBox(height: 20), // Spacer between recommendation boxes
-              // News Recommendation Section
               Container(
-                width: boxWidth,
-                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                width: screenWidth * 0.9,
+                height: screenHeight * 0.1,
                 decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(15),
-                  border: Border.all(color: Colors.black),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Rekomendasi Berita',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    ListTile(
-                      leading: const Icon(Icons.article),
-                      title: const Text('Berita 1'),
-                      subtitle: const Text('Deskripsi berita 1'),
-                      onTap: () {
-                        // Handle onTap for news recommendation 1
-                      },
-                    ),
-                    ListTile(
-                      leading: const Icon(Icons.article),
-                      title: const Text('Berita 2'),
-                      subtitle: const Text('Deskripsi berita 2'),
-                      onTap: () {
-                        // Handle onTap for news recommendation 2
-                      },
-                    ),
-                    ListTile(
-                      leading: const Icon(Icons.article),
-                      title: const Text('Berita 3'),
-                      subtitle: const Text('Deskripsi berita 3'),
-                      onTap: () {
-                        // Handle onTap for news recommendation 3
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20), // Spacer between recommendation boxes
-              // Product Recommendation Section
-              Container(
-                width: boxWidth,
-                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(15),
-                  border: Border.all(color: Colors.black),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Rekomendasi Barang',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    ListTile(
-                      leading: const Icon(Icons.shopping_cart),
-                      title: const Text('Barang 1'),
-                      subtitle: const Text('Deskripsi barang 1'),
-                      onTap: () {
-                        // Handle onTap for product recommendation 1
-                      },
-                    ),
-                    ListTile(
-                      leading: const Icon(Icons.shopping_cart),
-                      title: const Text('Barang 2'),
-                      subtitle: const Text('Deskripsi barang 2'),
-                      onTap: () {
-                        // Handle onTap for product recommendation 2
-                      },
-                    ),
-                    ListTile(
-                      leading: const Icon(Icons.shopping_cart),
-                      title: const Text('Barang 3'),
-                      subtitle: const Text('Deskripsi barang 3'),
-                      onTap: () {
-                        // Handle onTap for product recommendation 3
-                      },
-                    ),
-                  ],
-                ),
-              ),
+                  color: Colors.blue,
+                  borderRadius: BorderRadius.circular(20), // Sesuaikan dengan kebutuhan Anda
+                ),   
+              )
             ],
           ),
         ),
