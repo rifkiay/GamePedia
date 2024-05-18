@@ -17,7 +17,6 @@ class HomeState extends State<Home> {
   final List<String> coffeeTypes = ['All', 'Berita', 'Market', 'Community'];
   int selectedIndex = 0;
 
-
   @override
   void initState() {
     super.initState();
@@ -42,19 +41,21 @@ class HomeState extends State<Home> {
         }
         pageController.animateToPage(
           currentPage,
-          duration: const Duration(milliseconds: 300), // Short duration for smooth transition
+          duration: const Duration(
+              milliseconds: 300), // Short duration for smooth transition
           curve: Curves.easeInOut,
         );
         autoScroll();
       });
     }
+
     autoScroll();
   }
 
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth= MediaQuery.of(context).size.width;
+    final screenWidth = MediaQuery.of(context).size.width;
 
     return SafeArea(
       child: SingleChildScrollView(
@@ -73,7 +74,8 @@ class HomeState extends State<Home> {
                     ),
                   ),
                   Positioned(
-                    top: screenHeight * 0.02, // Adjust this value to change how much of the SizedBox is outside the Container
+                    top: screenHeight *
+                        0.02, // Adjust this value to change how much of the SizedBox is outside the Container
                     left: screenWidth * 0.05,
                     right: screenWidth * 0.05,
                     child: SizedBox(
@@ -120,11 +122,15 @@ class HomeState extends State<Home> {
                             });
                           },
                           labelStyle: TextStyle(
-                            color: selectedIndex == index ? Colors.white : Colors.black,
+                            color: selectedIndex == index
+                                ? Colors.white
+                                : Colors.black,
                           ),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0), // Sesuaikan dengan kebutuhan Anda
-                            side:  const BorderSide(color: Colors.transparent), // Hilangkan border
+                            borderRadius: BorderRadius.circular(
+                                30.0), // Sesuaikan dengan kebutuhan Anda
+                            side: const BorderSide(
+                                color: Colors.transparent), // Hilangkan border
                           ),
                         ),
                       );
@@ -133,33 +139,115 @@ class HomeState extends State<Home> {
                 ),
               ),
 
-               SizedBox(
-                height: 100,
+               Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: GestureDetector(
+                    // onTap: () => navigateToDetailPage(context),
+                    child: const Text(
+                      'See More >',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 10), // Adjusted for better spacing
+
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Container(
-                      width: 100,
-                      height: 100,
+                      width: 150,
+                      height: 150,
+                      margin: const EdgeInsets.only(right: 10),
                       decoration: BoxDecoration(
                         color: Colors.blue,
-                        borderRadius: BorderRadius.circular(20), // Sesuaikan dengan kebutuhan Anda
+                        borderRadius: BorderRadius.circular(20),
+                        image: const DecorationImage(
+                          image:
+                              AssetImage('assets/images/pizza.jpg'),
+                              // Source image https://www.freepik.com/free-photo/crispy-mixed-pizza-with-olives-sausage_6752011.htm#fromView=search&page=1&position=14&uuid=4122d0f8-b3ab-4546-a547-d2b60b795697
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      child: const Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            'Pizza',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              backgroundColor: Colors.white,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                     Container(
-                      width: 100,
-                      height: 100,
+                      width: 150,
+                      height: 150,
+                      margin: const EdgeInsets.only(right: 10),
                       decoration: BoxDecoration(
-                        color: Colors.green,
-                        borderRadius: BorderRadius.circular(20), // Sesuaikan dengan kebutuhan Anda
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        image: const DecorationImage(
+                          image:
+                              AssetImage('assets/images/onion.jpg'),
+                              // Source image <a href="https://www.freepik.com/free-photo/high-angle-delicious-fast-food-drink_21744879.htm#fromView=search&page=1&position=11&uuid=6b40bb59-0a64-49b4-aae5-9e9d57ad252a">Image by freepik</a>
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      child: const Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            'Onion Rings',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              backgroundColor: Colors.white,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                     Container(
-                      width: 100,
-                      height: 100,
+                      width: 150,
+                      height: 150,
+                      margin: const EdgeInsets.only(right: 10),
                       decoration: BoxDecoration(
-                        color: Colors.orange,
-                        borderRadius: BorderRadius.circular(20), // Sesuaikan dengan kebutuhan Anda
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        image: const DecorationImage(
+                          image:
+                              AssetImage('assets/images/waffle.jpg'),
+                              // Source image https://www.google.com/url?sa=i&url=https%3A%2F%2Fjoyfoodsunshine.com%2Fbest-waffles%2F&psig=AOvVaw0uxdO4wEY-E3LQJeDCxcm1&ust=1716107351984000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCLj5oIbkloYDFQAAAAAdAAAAABAE
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      child: const Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            'Waffles',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              backgroundColor: Colors.white,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ],
@@ -169,12 +257,18 @@ class HomeState extends State<Home> {
 
               Container(
                 width: screenWidth * 0.9,
-                height: screenHeight * 0.1,
+                height: screenHeight * 0.3,
                 decoration: BoxDecoration(
-                  color: Colors.blue,
-                  borderRadius: BorderRadius.circular(20), // Sesuaikan dengan kebutuhan Anda
-                ),   
-              )
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  image: const DecorationImage(
+                    image: AssetImage('assets/images/6029646.jpg'),
+                    // Source image <a href="https://www.freepik.com/free-vector/computer-trouble-shooting-concept-illustration_18771510.htm#query=maintenance&position=0&from_view=keyword&track=sph&uuid=1a50d48d-7e84-40be-b267-d2f6e54b3eb0">Image by storyset</a> on Freepik
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+
             ],
           ),
         ),

@@ -4,6 +4,7 @@ import 'package:logger/logger.dart';
 import 'package:game_pedia/homepage/berita.dart';
 import 'package:game_pedia/homepage/market.dart';
 import 'package:game_pedia/homepage/home.dart';
+import 'package:game_pedia/signin_up/signin.dart';
 
 class AppBarDll extends StatefulWidget {
   const AppBarDll({super.key});
@@ -108,16 +109,31 @@ class AppBarDllState extends State<AppBarDll> {
                 value: 'Settings',
                 child: Text('Settings'),
               ),
+              const PopupMenuItem(
+                value: 'Logout',
+                child: Text('Logout'),
+              ),
+              const PopupMenuItem(
+                value: 'BackToSignIn',
+                child: Text('Back to Sign In'),
+              ),
             ],
             onSelected: (value) {
-              if (value == 'Settings') {}
+              if (value == 'Settings') {
+                // Tambahkan logika untuk menu Settings di sini
+              } else if (value == 'Logout') {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Signin()),
+                );
+              }
             },
           ),
         ],
-        backgroundColor: const Color(0xFF41C9E2),
       ),
       
       backgroundColor: Colors.grey[200],
+      
       body: IndexedStack(
         index: _selectedIndex,
         children: const [
