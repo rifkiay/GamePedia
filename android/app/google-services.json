@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "51721152076",
+    "project_id": "gamepedia-90766",
+    "storage_bucket": "gamepedia-90766.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:51721152076:android:7106bae91c5f3c2498f6e9",
+        "android_client_info": {
+          "package_name": "com.example.game_pedia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "51721152076-vh6n3b84u4bces12fp1de9rqj390359c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfvoXxM1uI2vc6oUWG2UIIbbD0ikwJs_4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "51721152076-vh6n3b84u4bces12fp1de9rqj390359c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

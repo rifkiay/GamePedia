@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'dart:async'; // Import the dart:async library
+import 'dart:async';
+import 'package:GamePedia/api/api.dart'; 
+import 'package:logger/logger.dart'; 
+import 'package:GamePedia/berita/berita_detail.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -17,11 +20,18 @@ class HomeState extends State<Home> {
   final List<String> coffeeTypes = ['All', 'Berita', 'Market', 'Community'];
   int selectedIndex = 0;
 
+  final APIService apiService = APIService();
+  List<dynamic> data = [];
+  final Logger logger = Logger();
+
+  // Dio dio = Dio();
+
   @override
   void initState() {
     super.initState();
     pageController = PageController();
     startAutoScroll();
+    fetchDataFromAPI();
   }
 
   @override
@@ -41,8 +51,7 @@ class HomeState extends State<Home> {
         }
         pageController.animateToPage(
           currentPage,
-          duration: const Duration(
-              milliseconds: 300), // Short duration for smooth transition
+          duration: const Duration(milliseconds: 300), // Short duration for smooth transition
           curve: Curves.easeInOut,
         );
         autoScroll();
@@ -50,6 +59,18 @@ class HomeState extends State<Home> {
     }
 
     autoScroll();
+  }
+
+  void fetchDataFromAPI() async {
+    String apiUrl = 'http://10.0.2.2:8000/berita'; 
+    try {
+      var fetchedData = await apiService.fetchData(apiUrl);
+      setState(() {
+        data = fetchedData;
+      });
+    } catch (e) {
+      logger.e('Error fetching data: $e');
+    }
   }
 
   @override
@@ -74,8 +95,7 @@ class HomeState extends State<Home> {
                     ),
                   ),
                   Positioned(
-                    top: screenHeight *
-                        0.02, // Adjust this value to change how much of the SizedBox is outside the Container
+                    top: screenHeight * 0.02, 
                     left: screenWidth * 0.05,
                     right: screenWidth * 0.05,
                     child: SizedBox(
@@ -101,7 +121,7 @@ class HomeState extends State<Home> {
                   ),
                 ],
               ),
-              const SizedBox(height: 100), // Adjusted for better spacing
+              const SizedBox(height: 100), 
 
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -127,10 +147,9 @@ class HomeState extends State<Home> {
                                 : Colors.black,
                           ),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                30.0), // Sesuaikan dengan kebutuhan Anda
+                            borderRadius: BorderRadius.circular(30.0),
                             side: const BorderSide(
-                                color: Colors.transparent), // Hilangkan border
+                                color: Colors.transparent), 
                           ),
                         ),
                       );
@@ -157,103 +176,63 @@ class HomeState extends State<Home> {
                 ),
               ),
 
-              const SizedBox(height: 10), // Adjusted for better spacing
+              const SizedBox(height: 10),
 
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  children: [
-                    Container(
-                      width: 150,
-                      height: 150,
-                      margin: const EdgeInsets.only(right: 10),
-                      decoration: BoxDecoration(
-                        color: Colors.blue,
-                        borderRadius: BorderRadius.circular(20),
-                        image: const DecorationImage(
-                          image:
-                              AssetImage('assets/images/pizza.jpg'),
-                              // Source image https://www.freepik.com/free-photo/crispy-mixed-pizza-with-olives-sausage_6752011.htm#fromView=search&page=1&position=14&uuid=4122d0f8-b3ab-4546-a547-d2b60b795697
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      child: const Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            'Pizza',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              backgroundColor: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
+                  children: data.isNotEmpty
+                      ? data.take(5).map((news) {
+                          return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => BeritaDetail(data: news),
+                              ),
+                            );
+                          },
+                          child: Container(
+                                width: 150,
+                                height: 150,
+                                margin: const EdgeInsets.only(right: 10),
+                                decoration: BoxDecoration(
+                                  color: Colors.blue,
+                                  borderRadius: BorderRadius.circular(20),
+                                  image: DecorationImage(
+                                    image: NetworkImage(
+                                      'http://10.0.2.2:8000/storage/gambar_news/${news['gambar']}',
+                                    ),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                child: Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: Container(
+                                    width: double.infinity,
+                                    color: Colors.white.withOpacity(0.6), // Transparent background
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      news['judul'],
+                                      maxLines: 1, // Limit the text to 2 lines
+                                      overflow: TextOverflow.ellipsis, // Add ellipsis if text is too long
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                )
+                              );
+                            }).toList()
+                          : [Container()], // Placeholder kosong jika data kosong
                     ),
-                    Container(
-                      width: 150,
-                      height: 150,
-                      margin: const EdgeInsets.only(right: 10),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        image: const DecorationImage(
-                          image:
-                              AssetImage('assets/images/onion.jpg'),
-                              // Source image <a href="https://www.freepik.com/free-photo/high-angle-delicious-fast-food-drink_21744879.htm#fromView=search&page=1&position=11&uuid=6b40bb59-0a64-49b4-aae5-9e9d57ad252a">Image by freepik</a>
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      child: const Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            'Onion Rings',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              backgroundColor: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      width: 150,
-                      height: 150,
-                      margin: const EdgeInsets.only(right: 10),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        image: const DecorationImage(
-                          image:
-                              AssetImage('assets/images/waffle.jpg'),
-                              // Source image https://www.google.com/url?sa=i&url=https%3A%2F%2Fjoyfoodsunshine.com%2Fbest-waffles%2F&psig=AOvVaw0uxdO4wEY-E3LQJeDCxcm1&ust=1716107351984000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCLj5oIbkloYDFQAAAAAdAAAAABAE
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      child: const Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            'Waffles',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              backgroundColor: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
+                  ),
+                  const SizedBox(height: 20),
+
+
+
 
               Container(
                 width: screenWidth * 0.9,
@@ -263,12 +242,10 @@ class HomeState extends State<Home> {
                   borderRadius: BorderRadius.circular(20),
                   image: const DecorationImage(
                     image: AssetImage('assets/images/6029646.jpg'),
-                    // Source image <a href="https://www.freepik.com/free-vector/computer-trouble-shooting-concept-illustration_18771510.htm#query=maintenance&position=0&from_view=keyword&track=sph&uuid=1a50d48d-7e84-40be-b267-d2f6e54b3eb0">Image by storyset</a> on Freepik
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
-
             ],
           ),
         ),

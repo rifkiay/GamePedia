@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:game_pedia/homepage/appbardll.dart';
-import 'package:game_pedia/signin_up/signup.dart';
+import 'package:GamePedia/controllers/user_controllers.dart';
+import 'package:GamePedia/homepage/appbardll.dart';
+import 'package:GamePedia/signin_up/signup.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:logger/logger.dart';
 
-class Signin extends StatelessWidget {
+class Signin extends StatefulWidget {
   const Signin({super.key});
 
   @override
+  SigninState createState() => SigninState();
+}
+
+class SigninState extends State<Signin> {
+  @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
     // Calculate the desired width for the input fields and button
     final desiredWidth = screenWidth * 0.9; // Decrease width by 10%
@@ -17,7 +26,7 @@ class Signin extends StatelessWidget {
         children: [
           Container(
             decoration: const BoxDecoration(
-              color: Color(0xFFF7EEDD), // Set the background color
+              color: Color.fromARGB(255, 255, 255, 255), // Set the background color
             ),
             child: Center(
               child: Column(
@@ -25,11 +34,19 @@ class Signin extends StatelessWidget {
                 children: [
                   // Logo Google
                   Image.asset(
-                    'assets/logo/google.png',
-                    height: 100,
+                    'assets/logo/GamePedia.png',
+                    height: 200,
                   ),
                   const SizedBox(height: 20),
-
+                  const Center(
+                    child: Text(
+                      'Welcome To GamePedia',
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Column(
@@ -43,13 +60,10 @@ class Signin extends StatelessWidget {
                               hintText: 'Enter your email',
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.horizontal(
-                                  left: Radius.circular(
-                                      30), // Circular at the start
-                                  right: Radius.circular(
-                                      30), // Circular at the end
+                                  left: Radius.circular(30), // Circular at the start
+                                  right: Radius.circular(30), // Circular at the end
                                 ),
-                                borderSide:
-                                    BorderSide.none, // Remove border color
+                                borderSide: BorderSide.none, // Remove border color
                               ),
                               fillColor: Color(0xFFDCECE6),
                               filled: true,
@@ -67,13 +81,10 @@ class Signin extends StatelessWidget {
                               hintText: 'Enter your password',
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.horizontal(
-                                  left: Radius.circular(
-                                      30), // Circular at the start
-                                  right: Radius.circular(
-                                      30), // Circular at the end
+                                  left: Radius.circular(30), // Circular at the start
+                                  right: Radius.circular(30), // Circular at the end
                                 ),
-                                borderSide:
-                                    BorderSide.none, // Remove border color
+                                borderSide: BorderSide.none, // Remove border color
                               ),
                               fillColor: Color(0xFFDCECE6),
                               filled: true,
@@ -84,24 +95,60 @@ class Signin extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 20),
+                        Align(
+                          alignment: Alignment.centerRight, // Align to the right
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const Signup(),
+                                ),
+                              );
+                            },
+                            child: const Text(
+                              'Forgot your password?',
+                              style: TextStyle(
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),// Adjusted spacing
+
 
                         SizedBox(
                           width: desiredWidth,
                           child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const AppBarDll()),
-                              );
-                            },
+                            onPressed: () async {
+                            try {
+                              final user = await UserController.loginWithGoogle();
+                              if (user != null && mounted) {
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                    builder: (context) => const AppBarDll(),
+                                  ),
+                                );
+                              }
+                            } 
+                            on FirebaseAuthException catch(error){
+                              // print(error.message);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: 
+                                  Text(
+                                    error.message ?? "Ups ada yang salah",
+                                  )));
+                            }
+                            catch (error) {
+                              // print(error);
+                            }
+                          },
+
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all<Color>(
-                                  const Color(
-                                      0xFFACE2E1)), // Set the button background color
+                                  const Color(0xFFACE2E1)), // Set the button background color
                               minimumSize: MaterialStateProperty.all<Size>(
-                                  const Size(
-                                      120, 60)), // Adjust the minimum size
+                                  const Size(120, 60)), // Adjust the minimum size
                             ),
                             child: const Text(
                               'Login',
@@ -111,58 +158,65 @@ class Signin extends StatelessWidget {
                             ),
                           ),
                         ),
-                        const SizedBox(
-                            height:
-                                10), // Add spacing between button and "Forgot your password?" text
-
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const Signup()), // Ganti dengan halaman tujuan untuk signup dengan Google
-                            );
-                          },
-                          child: const Text(
-                            'Forgot your password?',
+                        const SizedBox(height: 50),
+                        const Center(
+                          child: Text(
+                            'Or login with',
                             style: TextStyle(
                               color: Colors.black,
                             ),
-                            textAlign: TextAlign.center, // Center the text
                           ),
                         ),
 
-                        const SizedBox(height: 50), 
 
+                        const SizedBox(height: 10),
                         GestureDetector(
-                          onTap: () {
-                            // Handle "Login with Google" action
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const Signup()), // Ganti dengan halaman tujuan untuk login dengan Google
-                            );
+                          onTap: () async {
+                            try {
+                              final user = await UserController.loginWithGoogle();
+                              if (user != null && mounted) {
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                    builder: (context) => const AppBarDll(),
+                                  ),
+                                );
+                              }
+                            } 
+                            on FirebaseAuthException catch(error){
+                              // print(error.message);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: 
+                                  Text(
+                                    error.message ?? "Ups ada yang salah",
+                                  )));
+                            }
+                            catch (error) {
+                              (error);
+                              //  ScaffoldMessenger.of(context).showSnackBar(
+                              //   SnackBar(content: 
+                              //     Text(
+                              //       error.toString(),
+                              //     )));
+                            }
                           },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                'assets/logo/google.png',
-                                height: 20,
-                              ),
-                              const SizedBox(width: 10),
-                              const Text(
-                                'Login with Google',
-                                style: TextStyle(
-                                  color: Colors.black,
+
+                          child: Center( // Menempatkan kotak di tengah layar
+                            child: Container(
+                              width: screenWidth * 0.2, // Menetapkan lebar kotak
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.transparent, // Warna border
                                 ),
+                                borderRadius: BorderRadius.circular(30), // Border yang melengkung
+                                color: Colors.grey[200], // Warna latar belakang border
                               ),
-                            ],
+                              child: Image.asset(
+                                'assets/logo/google.png',
+                                height: screenHeight * 0.07,
+                              ),
+                            ),
                           ),
                         ),
-
                       ],
                     ),
                   ),
@@ -171,39 +225,38 @@ class Signin extends StatelessWidget {
             ),
           ),
 
-          
-
           Align(
             alignment: Alignment.bottomCenter,
-            child: GestureDetector(
-              onTap: () {
-                // Handle "SignUp with Google" action
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          const Signup()), // Ganti dengan halaman tujuan untuk signup dengan Google
-                );
-              },
-              child: Container(
-                color: Colors.transparent, // Make the container transparent
-                padding: const EdgeInsets.all(16),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // Image.asset(
-                    //   'assets/logo/google.png',
-                    //   height: 20,
-                    // ),
-                    SizedBox(width: 10),
-                    Text(
-                      'SignUp with Google',
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    "Not have an account?",
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
+                  const SizedBox(width: 5), // Add some spacing between the texts
+                  GestureDetector(
+                    onTap: () {
+                      // Handle "SignUp with Google" action
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const Signup(), // Ganti dengan halaman tujuan untuk signup dengan Google
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      'Register now',
                       style: TextStyle(
-                        color: Colors.black,
+                        color: Colors.blue,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),

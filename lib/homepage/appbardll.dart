@@ -1,10 +1,10 @@
-import 'package:game_pedia/api/api.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
-import 'package:game_pedia/homepage/berita.dart';
-import 'package:game_pedia/homepage/market.dart';
-import 'package:game_pedia/homepage/home.dart';
-import 'package:game_pedia/signin_up/signin.dart';
+import 'package:GamePedia/homepage/berita.dart';
+import 'package:GamePedia/homepage/market.dart';
+import 'package:GamePedia/homepage/home.dart';
+import 'package:GamePedia/api/api.dart';
+import 'package:GamePedia/drawer/custom_drawer.dart';
 
 class AppBarDll extends StatefulWidget {
   const AppBarDll({super.key});
@@ -24,7 +24,7 @@ class AppBarDllState extends State<AppBarDll> {
   @override
   void initState() {
     super.initState();
-    fetchDataFromAPI();
+    // fetchDataFromAPI();
   }
 
   @override
@@ -33,107 +33,87 @@ class AppBarDllState extends State<AppBarDll> {
     super.dispose();
   }
 
-  void fetchDataFromAPI() async {
-    String apiUrl = 'http://10.0.2.2:8000/';
-    try {
-      var fetchedData = await apiService.fetchData(apiUrl);
-      setState(() {
-        data = fetchedData;
-      });
-    } catch (e) {
-      logger.e('Error fetching data: $e');
-    }
-  }
+  // void fetchDataFromAPI() async {
+  //   String apiUrl = 'http://10.0.2.2:8000/';
+  //   try {
+  //     var fetchedData = await apiService.fetchData(apiUrl);
+  //     setState(() {
+  //       data = fetchedData;
+  //     });
+  //   } catch (e) {
+  //     logger.e('Error fetching data: $e');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
-        title: const SizedBox.shrink(),
-        centerTitle: true,
-        actions: [
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText:  _getSearchPlaceholder(),
-                  filled: true,
-                  fillColor: Colors.grey[200],
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                    borderSide: BorderSide.none,
+        backgroundColor: const Color(0xFF41C9E2),
+        title: Padding(
+          padding: const EdgeInsets.only(right: 1.0),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  decoration: InputDecoration(
+                    hintText: _getSearchPlaceholder(),
+                    filled: true,
+                    fillColor: Colors.grey[200],
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                      borderSide: BorderSide.none,
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                      borderSide: const BorderSide(color: Colors.black),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                        vertical: 4.0, horizontal: 16.0),
+                    prefixIcon: const Icon(Icons.search),
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                    borderSide: const BorderSide(color: Colors.white), // Warna border saat aktif (ditekan)
-                  ),
-                  contentPadding:
-                      const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
-                  prefixIcon: const Icon(Icons.search),
+                  onChanged: (value) {
+                    setState(() {
+                      searchText = value;
+                    });
+                    if (_selectedIndex == 0) {
+                      searchHome(value);
+                    } else if (_selectedIndex == 1) {
+                      searchBerita(value);
+                    } else if (_selectedIndex == 2) {
+                      searchMarket(value);
+                    }
+                  },
                 ),
-                onChanged: (value) {
-                  // Update teks pencarian saat berubah
-                  setState(() {
-                    searchText = value;
-                  });
-                  // Panggil fungsi pencarian sesuai dengan halaman aktif
-                  if (_selectedIndex == 0) {
-                    searchHome(value);
-                  } else if (_selectedIndex == 1) {
-                    searchBerita(value);
-                  } else if (_selectedIndex == 2) {
-                    searchMarket(value);
-                  }
-                },
               ),
-            ),
-          ),
-          
-          IconButton(
-            icon: const Icon(Icons.notifications),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: const Icon(Icons.chat),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: const Icon(Icons.shopping_cart),
-            onPressed: () {},
-          ),
-          PopupMenuButton(
-            itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-              const PopupMenuItem(
-                value: 'Settings',
-                child: Text('Settings'),
+              IconButton(
+                icon: const Icon(Icons.notifications),
+                onPressed: () {},
               ),
-              const PopupMenuItem(
-                value: 'Logout',
-                child: Text('Logout'),
+              IconButton(
+                icon: const Icon(Icons.chat),
+                onPressed: () {},
               ),
-              const PopupMenuItem(
-                value: 'BackToSignIn',
-                child: Text('Back to Sign In'),
+              IconButton(
+                icon: const Icon(Icons.shopping_cart),
+                onPressed: () {},
               ),
             ],
-            onSelected: (value) {
-              if (value == 'Settings') {
-                // Tambahkan logika untuk menu Settings di sini
-              } else if (value == 'Logout') {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Signin()),
-                );
-              }
-            },
           ),
-        ],
+        ),
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: const Icon(Icons.menu),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            );
+          },
+        ),
       ),
-      
+      drawer: const CustomDrawer(), //drawer
       backgroundColor: Colors.grey[200],
-      
       body: IndexedStack(
         index: _selectedIndex,
         children: const [
@@ -142,8 +122,6 @@ class AppBarDllState extends State<AppBarDll> {
           Market(),
         ],
       ),
-
-
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.grey[200],
         items: const <BottomNavigationBarItem>[
@@ -190,23 +168,15 @@ class AppBarDllState extends State<AppBarDll> {
     }
   }
 
-  // Lihat log apakah sudah benar atau tidak
   void searchHome(String query) {
-    // Implementasi logika pencarian di halaman Home
     logger.i('Searching in Home: $query');
   }
 
-  // Fungsi pencarian di halaman Berita
   void searchBerita(String query) {
-    // Implementasi logika pencarian di halaman Berita
     logger.i('Searching in Berita: $query');
   }
 
-  // Fungsi pencarian di halaman Market
   void searchMarket(String query) {
-    // Implementasi logika pencarian di halaman Market
     logger.i('Searching in Market: $query');
   }
-
-  
 }

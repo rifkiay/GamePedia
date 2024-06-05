@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:game_pedia/signin_up/signin.dart';
-import 'package:game_pedia/homepage/appbardll.dart';
+import 'package:GamePedia/signin_up/signin.dart';
+import 'package:GamePedia/homepage/appbardll.dart';
 
 class Signup extends StatelessWidget {
   const Signup({super.key});
