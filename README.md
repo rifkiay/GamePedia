@@ -1,3 +1,3 @@
-# game_pedia
+# GamePedia
 
-A new Flutter project.
+Projek Kampus
