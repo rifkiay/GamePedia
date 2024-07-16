@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:GamePedia/api/api.dart'; 
-import 'package:logger/logger.dart'; 
+import 'package:GamePedia/api/api.dart';
+import 'package:logger/logger.dart';
 import 'package:GamePedia/berita/berita_detail.dart';
+import 'package:GamePedia/market/market_detail.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -51,7 +52,8 @@ class HomeState extends State<Home> {
         }
         pageController.animateToPage(
           currentPage,
-          duration: const Duration(milliseconds: 300), // Short duration for smooth transition
+          duration: const Duration(
+              milliseconds: 300), // Short duration for smooth transition
           curve: Curves.easeInOut,
         );
         autoScroll();
@@ -62,7 +64,7 @@ class HomeState extends State<Home> {
   }
 
   void fetchDataFromAPI() async {
-    String apiUrl = 'http://10.0.2.2:8000/berita'; 
+    String apiUrl = 'https://orange-monkey-189505.hostingersite.com/berita';
     try {
       var fetchedData = await apiService.fetchData(apiUrl);
       setState(() {
@@ -95,7 +97,7 @@ class HomeState extends State<Home> {
                     ),
                   ),
                   Positioned(
-                    top: screenHeight * 0.02, 
+                    top: screenHeight * 0.02,
                     left: screenWidth * 0.05,
                     right: screenWidth * 0.05,
                     child: SizedBox(
@@ -121,8 +123,7 @@ class HomeState extends State<Home> {
                   ),
                 ],
               ),
-              const SizedBox(height: 100), 
-
+              const SizedBox(height: 100),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: SingleChildScrollView(
@@ -148,8 +149,7 @@ class HomeState extends State<Home> {
                           ),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30.0),
-                            side: const BorderSide(
-                                color: Colors.transparent), 
+                            side: const BorderSide(color: Colors.transparent),
                           ),
                         ),
                       );
@@ -157,8 +157,7 @@ class HomeState extends State<Home> {
                   ),
                 ),
               ),
-
-               Padding(
+              Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Align(
                   alignment: Alignment.centerRight,
@@ -175,7 +174,6 @@ class HomeState extends State<Home> {
                   ),
                 ),
               ),
-
               const SizedBox(height: 10),
 
               SingleChildScrollView(
@@ -184,15 +182,16 @@ class HomeState extends State<Home> {
                   children: data.isNotEmpty
                       ? data.take(5).map((news) {
                           return GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => BeritaDetail(data: news),
-                              ),
-                            );
-                          },
-                          child: Container(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        BeritaDetail(data: news),
+                                  ),
+                                );
+                              },
+                              child: Container(
                                 width: 150,
                                 height: 150,
                                 margin: const EdgeInsets.only(right: 10),
@@ -201,7 +200,7 @@ class HomeState extends State<Home> {
                                   borderRadius: BorderRadius.circular(20),
                                   image: DecorationImage(
                                     image: NetworkImage(
-                                      'http://10.0.2.2:8000/storage/gambar_news/${news['gambar']}',
+                                      'https://orange-monkey-189505.hostingersite.com/storage/gambar_news/${news['gambar']}',
                                     ),
                                     fit: BoxFit.cover,
                                   ),
@@ -210,12 +209,14 @@ class HomeState extends State<Home> {
                                   alignment: Alignment.bottomCenter,
                                   child: Container(
                                     width: double.infinity,
-                                    color: Colors.white.withOpacity(0.6), // Transparent background
+                                    color: Colors.white.withOpacity(
+                                        0.6), // Transparent background
                                     padding: const EdgeInsets.all(8.0),
                                     child: Text(
                                       news['judul'],
                                       maxLines: 1, // Limit the text to 2 lines
-                                      overflow: TextOverflow.ellipsis, // Add ellipsis if text is too long
+                                      overflow: TextOverflow
+                                          .ellipsis, // Add ellipsis if text is too long
                                       style: const TextStyle(
                                         color: Colors.black,
                                         fontWeight: FontWeight.bold,
@@ -223,29 +224,99 @@ class HomeState extends State<Home> {
                                     ),
                                   ),
                                 ),
-                                )
-                              );
-                            }).toList()
-                          : [Container()], // Placeholder kosong jika data kosong
+                              ));
+                        }).toList()
+                      : [Container()], // Placeholder kosong jika data kosong
+                ),
+              ),
+              const SizedBox(height: 20),
+
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: GestureDetector(
+                    // onTap: () => navigateToDetailPage(context),
+                    child: const Text(
+                      'See More >',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-
-
-
-
-              Container(
-                width: screenWidth * 0.9,
-                height: screenHeight * 0.3,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  image: const DecorationImage(
-                    image: AssetImage('assets/images/6029646.jpg'),
-                    fit: BoxFit.cover,
                   ),
                 ),
               ),
+              const SizedBox(height: 10),
+
+
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: FutureBuilder(
+                  future: apiService.fetchData('https://orange-monkey-189505.hostingersite.com/market'),
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return const Center(child: Text('Error fetching data'));
+                    } else if (snapshot.hasData && snapshot.data != null) {
+                      List<dynamic> marketData = snapshot.data;
+                      return Row(
+                        children: marketData.take(5).map((marketItem) {
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => MarketDetail(
+                                    data: marketItem,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Container(
+                              width: 150,
+                              height: 150,
+                              margin: const EdgeInsets.only(right: 10),
+                              decoration: BoxDecoration(
+                                color: Colors.green, // Example color
+                                borderRadius: BorderRadius.circular(20),
+                                image: DecorationImage(
+                                  image: NetworkImage(
+                                    'https://orange-monkey-189505.hostingersite.com/storage/market/${marketItem['gambar']}',
+                                  ),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              child: Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Container(
+                                  width: double.infinity,
+                                  color: Colors.white.withOpacity(0.6),
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    marketItem['game'],
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      );
+                    } else {
+                      return Container(); // Placeholder kosong jika data belum tersedia
+                    }
+                  },
+                ),
+              )
             ],
           ),
         ),

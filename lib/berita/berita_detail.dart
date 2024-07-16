@@ -9,7 +9,7 @@ class BeritaDetail extends StatelessWidget {
   BeritaDetail({super.key, required this.data});
 
   Future<String> fetchAuthorName(int authorId) async {
-    String apiUrl = 'http://10.0.2.2:8000/authors';
+    String apiUrl = 'https://orange-monkey-189505.hostingersite.com/authors';
     try {
     dynamic authorData = await apiService.fetchData(apiUrl);
     // Loop through authorData to find the author with matching id
@@ -45,7 +45,7 @@ Widget build(BuildContext context) {
           ),
           const SizedBox(height: 10),
           Image.network(
-            'http://10.0.2.2:8000/storage/gambar_news/${data['gambar']}',
+            'https://orange-monkey-189505.hostingersite.com/storage/gambar_news/${data['gambar']}',
             width: MediaQuery.of(context).size.width,
             height: 200,
             fit: BoxFit.cover,

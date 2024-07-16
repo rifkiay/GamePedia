@@ -20,6 +20,12 @@ class AppBarDllState extends State<AppBarDll> {
   dynamic data;
   final Logger logger = Logger();
   String searchText = '';
+  List<dynamic> homeData = [];
+  List<dynamic> beritaData = [];
+  List<dynamic> marketData = [];
+  List<dynamic> filteredHomeData = [];
+  List<dynamic> filteredBeritaData = [];
+  List<dynamic> filteredMarketData = [];
 
   @override
   void initState() {
@@ -33,17 +39,23 @@ class AppBarDllState extends State<AppBarDll> {
     super.dispose();
   }
 
-  // void fetchDataFromAPI() async {
-  //   String apiUrl = 'http://10.0.2.2:8000/';
-  //   try {
-  //     var fetchedData = await apiService.fetchData(apiUrl);
-  //     setState(() {
-  //       data = fetchedData;
-  //     });
-  //   } catch (e) {
-  //     logger.e('Error fetching data: $e');
-  //   }
-  // }
+   void fetchData() async {
+    final homeResponse = await apiService.fetchData('https://orange-monkey-189505.hostingersite.com/berita');
+    final marketResponse = await apiService.fetchData('https://orange-monkey-189505.hostingersite.com/market');
+    final beritaResponse = await apiService.fetchData('https://orange-monkey-189505.hostingersite.com/berita');
+
+    setState(() {
+      homeData = homeResponse;
+      marketData = marketResponse;
+      beritaData = beritaResponse;
+
+      // Initialize filtered data with all data initially
+      filteredHomeData = homeData;
+      filteredMarketData = marketData;
+      filteredBeritaData = beritaData;
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {

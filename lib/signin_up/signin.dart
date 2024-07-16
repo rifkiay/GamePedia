@@ -38,14 +38,14 @@ class SigninState extends State<Signin> {
                     height: 200,
                   ),
                   const SizedBox(height: 20),
-                  const Center(
-                    child: Text(
-                      'Welcome To GamePedia',
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
+                  // const Center(
+                  //   child: Text(
+                  //     'Welcome To GamePedia',
+                  //     style: TextStyle(
+                  //       color: Colors.black,
+                  //     ),
+                  //   ),
+                  // ),
                   const SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -208,7 +208,7 @@ class SigninState extends State<Signin> {
                                   color: Colors.transparent, // Warna border
                                 ),
                                 borderRadius: BorderRadius.circular(30), // Border yang melengkung
-                                color: Colors.grey[200], // Warna latar belakang border
+                                // color: Colors.grey[200], // Warna latar belakang border
                               ),
                               child: Image.asset(
                                 'assets/logo/google.png',
@@ -225,41 +225,41 @@ class SigninState extends State<Signin> {
             ),
           ),
 
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    "Not have an account?",
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
-                  ),
-                  const SizedBox(width: 5), // Add some spacing between the texts
-                  GestureDetector(
-                    onTap: () {
-                      // Handle "SignUp with Google" action
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const Signup(), // Ganti dengan halaman tujuan untuk signup dengan Google
-                        ),
-                      );
-                    },
-                    child: const Text(
-                      'Register now',
-                      style: TextStyle(
-                        color: Colors.blue,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          // Align(
+          //   alignment: Alignment.bottomCenter,
+          //   child: Padding(
+          //     padding: const EdgeInsets.all(16.0),
+          //     child: Row(
+          //       mainAxisAlignment: MainAxisAlignment.center,
+          //       children: [
+          //         const Text(
+          //           "Not have an account?",
+          //           style: TextStyle(
+          //             color: Colors.black,
+          //           ),
+          //         ),
+          //         const SizedBox(width: 5), // Add some spacing between the texts
+          //         GestureDetector(
+          //           onTap: () {
+          //             // Handle "SignUp with Google" action
+          //             Navigator.push(
+          //               context,
+          //               MaterialPageRoute(
+          //                 builder: (context) => const Signup(), // Ganti dengan halaman tujuan untuk signup dengan Google
+          //               ),
+          //             );
+          //           },
+          //           child: const Text(
+          //             'Register now',
+          //             style: TextStyle(
+          //               color: Colors.blue,
+          //             ),
+          //           ),
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

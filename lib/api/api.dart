@@ -20,3 +20,5 @@ class APIService {
     }
   }
 }
+
+final apiService = APIService();

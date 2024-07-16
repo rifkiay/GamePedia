@@ -14,6 +14,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "51721152076-62tfq1dl7r6kqc831ikus3bg12bk04t5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.game_pedia",
+            "certificate_hash": "83a11d648faedabd728184a79a6f37222ff2d788"
+          }
+        },
+        {
+          "client_id": "51721152076-ddrjdml9esekkrdoqoprqh6es1adsviq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.game_pedia",
+            "certificate_hash": "148c404e60d578de831a9f127d5042bf40cffa3a"
+          }
+        },
+        {
           "client_id": "51721152076-vh6n3b84u4bces12fp1de9rqj390359c.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,6 +45,65 @@
             {
               "client_id": "51721152076-vh6n3b84u4bces12fp1de9rqj390359c.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "51721152076-uqub73klgojk5p6vt91d5lv0nr0rr4st.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.gamePedia"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:51721152076:android:a49951df44106bf998f6e9",
+        "android_client_info": {
+          "package_name": "com.example.gamepedia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "51721152076-3j5nn6p71tis5qr7prq9h42jp8e6vo69.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.gamepedia",
+            "certificate_hash": "83a11d648faedabd728184a79a6f37222ff2d788"
+          }
+        },
+        {
+          "client_id": "51721152076-lt866mskvkn0s5g17qbtfo14fueikqi1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.gamepedia",
+            "certificate_hash": "148c404e60d578de831a9f127d5042bf40cffa3a"
+          }
+        },
+        {
+          "client_id": "51721152076-vh6n3b84u4bces12fp1de9rqj390359c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfvoXxM1uI2vc6oUWG2UIIbbD0ikwJs_4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "51721152076-vh6n3b84u4bces12fp1de9rqj390359c.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "51721152076-uqub73klgojk5p6vt91d5lv0nr0rr4st.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.gamePedia"
+              }
             }
           ]
         }
